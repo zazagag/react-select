@@ -1355,15 +1355,24 @@ var Select$1 = function (_React$Component) {
 				return;
 			}
 
+			var focusAfterClear = true;
+			if (this.props.onClearValue) {
+				this.props.onClearValue(event);
+			}
+
+			if (event.defaultPrevented) {
+				focusAfterClear = false;
+			}
+
 			event.preventDefault();
 
 			this.setValue(this.getResetValue());
 			this.setState({
 				inputValue: this.handleInputValueChange(''),
-				isOpen: false
+				isOpen: !focusAfterClear
 			}, this.focus);
 
-			this._focusAfterClear = true;
+			this._focusAfterClear = focusAfterClear;
 		}
 	}, {
 		key: 'getResetValue',
@@ -1949,6 +1958,7 @@ Select$1.propTypes = {
 	onBlur: PropTypes.func, // onBlur handler: function (event) {}
 	onBlurResetsInput: PropTypes.bool, // whether input is cleared on blur
 	onChange: PropTypes.func, // onChange handler: function (newValue) {}
+	onClearValue: PropTypes.func, // onClearValue handler for clear value function (event) {} (event.preventDefault prevent close select)
 	onClose: PropTypes.func, // fires when the menu is closed
 	onCloseResetsInput: PropTypes.bool, // whether input is cleared when menu is closed through the arrow
 	onFocus: PropTypes.func, // onFocus handler: function (event) {}
